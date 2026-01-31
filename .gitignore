@@ -123,7 +123,8 @@ yarn-debug.log
 # Optional: Test Images (uncomment if you don't want to commit test images)
 ascii test images/
 
-# Documentation (ignore all Markdown except README)
+# Documentation (ignore all Markdown except README and LICENSE)
 *.md
 !README.md
+!LICENSE.md
 
