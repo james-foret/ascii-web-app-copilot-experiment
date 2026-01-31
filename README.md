@@ -2,6 +2,8 @@
 
 A modern, responsive web application that converts images to ASCII art with full support for animated GIFs.
 
+*This web app was programmed entirely by AI, and was written as an experiment for a university assignment. Beyond prompting and ideation of software features, this is completely AI generated*
+
 ## Features
 
 ### Image Processing
