@@ -126,4 +126,4 @@ ascii test images/
 # Documentation (ignore all Markdown except README)
 *.md
 !README.md
-
+!LICENSE.md
