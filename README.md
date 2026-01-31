@@ -94,7 +94,6 @@ A modern, responsive web application that converts images to ASCII art with full
 - `index.html` - Main HTML structure
 - `styles.css` - Responsive CSS with modern design
 - `script.js` - Application logic and ASCII conversion
-- `ascii test images/` - Test images folder
 
 ## Credits
 
