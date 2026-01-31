@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✨ ASCII Art Converter</h1>
+            <p class="subtitle">Transform your images into beautiful ASCII art</p>
+        </header>
+
+        <main>
+            <div class="top-tabs" role="tablist" aria-label="Main sections">
+                <button class="tab-btn active" id="editorTabBtn" data-tab="editorTab" type="button">Editor</button>
+                <button class="tab-btn" id="galleryTabBtn" data-tab="galleryTab" type="button">Gallery</button>
+            </div>
+
+            <div class="tab-panel active" id="editorTab" role="tabpanel" aria-labelledby="editorTabBtn">
+                <!-- Upload Section -->
+                <section class="upload-section" id="uploadSection">
+                    <div class="upload-card">
+                        <h2>Upload Image</h2>
+                        <div class="upload-area" id="uploadArea">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p>Click to upload or drag and drop</p>
+                            <p class="hint">Supports JPG, PNG, GIF, BMP, WebP</p>
+                            <input type="file" id="imageInput" accept="image/*" hidden>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Preview Section (hidden by default) -->
+                <section class="preview-section" id="previewSection" style="display: none;">
+                    <!-- Left Column: Preview & Controls -->
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <h2>Preview & Adjust</h2>
+                            <div class="preview-actions">
+                                <button id="exportHtmlBtn" class="btn btn-secondary" title="Export as HTML">Export HTML</button>
+                                <button id="saveToGalleryBtn" class="btn btn-primary">Save to Gallery</button>
+                                <button id="cancelPreviewBtn" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-content">
+                            <div class="preview-ascii">
+                                <h3>ASCII Preview <span id="previewDimensions" class="preview-info"></span></h3>
+                                <div class="preview-zoom-controls">
+                                    <button class="zoom-btn" id="asciiZoomOut" title="Zoom out">−</button>
+                                    <span class="zoom-level" id="asciiZoomLevel">100%</span>
+                                    <button class="zoom-btn" id="asciiZoomIn" title="Zoom in">+</button>
+                                </div>
+                                <div class="preview-ascii-container" id="previewAsciiContainer">
+                                    <pre id="previewAsciiArt" class="ascii-display" style="transform: scale(1);"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Settings -->
+                    <div class="conversion-settings">
+                        <h3>Adjust Settings</h3>
+                        
+                        <!-- Custom Name -->
+                        <div class="setting-group">
+                            <label for="customName">Custom Name (optional):</label>
+                            <input type="text" id="customName" placeholder="Leave empty to use filename" class="text-input">
+                        </div>
+                        
+                        <!-- ASCII Style -->
+                        <div class="setting-group">
+                            <label for="asciiStyle">ASCII Style:</label>
+                            <select id="asciiStyle" class="select-input">
+                                <option value="standard">Standard (Classic)</option>
+                                <option value="detailed">Detailed (High Density)</option>
+                                <option value="simple">Simple (Basic Shapes)</option>
+                                <option value="blocks">Blocks (Block Characters)</option>
+                                <option value="binary">Binary (0s and 1s)</option>
+                                <option value="minimal">Minimal (Dots)</option>
+                                <option value="retro">Retro (Old School)</option>
+                                <option value="matrix">Matrix (Code Style)</option>
+                                <option value="emoji">Emoji (Shade Emoji)</option>
+                                <option value="custom">Custom Characters</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Custom Characters -->
+                        <div class="setting-group" id="customCharsGroup" style="display: none;">
+                            <label for="customChars">Custom Characters (dark to light):</label>
+                            <input type="text" id="customChars" placeholder="Enter characters..." class="text-input">
+                        </div>
+                        
+                        <!-- Color Mode -->
+                        <div class="setting-group">
+                            <label for="colorMode">Color Mode:</label>
+                            <select id="colorMode" class="select-input">
+                                <option value="monochrome">Monochrome (Black & White)</option>
+                                <option value="green">Monochrome Green (Terminal)</option>
+                                <option value="custom">Custom Monochrome</option>
+                                <option value="ansi">ANSI Colors (16 Colors)</option>
+                                <option value="rgb">Full RGB Color</option>
+                                <option value="gradient">Gradient Map</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Custom Color Picker -->
+                        <div class="setting-group" id="customColorGroup" style="display: none;">
+                            <label for="customColor">Custom Color:</label>
+                            <input type="color" id="customColor" value="#00ff00" class="color-input">
+                        </div>
+                        
+                        <!-- Background Color -->
+                        <div class="setting-group">
+                            <label for="backgroundColor">Background Color:</label>
+                            <input type="color" id="backgroundColor" value="#000000" class="color-input">
+                        </div>
+                        
+                        <!-- Width -->
+                        <div class="setting-group">
+                            <label for="widthSlider">Width (characters): <span id="widthValue">80</span></label>
+                            <input type="range" id="widthSlider" min="40" max="200" value="80">
+                        </div>
+                        
+                        <!-- Contrast -->
+                        <div class="setting-group">
+                            <label for="contrastSlider">Contrast: <span id="contrastValue">1.0</span></label>
+                            <input type="range" id="contrastSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+                        </div>
+                        
+                        <!-- Brightness -->
+                        <div class="setting-group">
+                            <label for="brightnessSlider">Brightness: <span id="brightnessValue">1.0</span></label>
+                            <input type="range" id="brightnessSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+                        </div>
+                        
+                        <!-- Saturation -->
+                        <div class="setting-group">
+                            <label for="saturationSlider">Saturation: <span id="saturationValue">1.0</span></label>
+                            <input type="range" id="saturationSlider" min="0" max="2.0" step="0.1" value="1.0">
+                        </div>
+                        
+                        <!-- Sharpness -->
+                        <div class="setting-group">
+                            <label for="sharpnessSlider">Sharpness: <span id="sharpnessValue">0</span></label>
+                            <input type="range" id="sharpnessSlider" min="0" max="5" step="0.5" value="0">
+                        </div>
+                        
+                        <!-- Bit Depth -->
+                        <div class="setting-group">
+                            <label for="bitDepthSlider">Bit Depth (Posterization): <span id="bitDepthValue">8</span></label>
+                            <input type="range" id="bitDepthSlider" min="1" max="8" step="1" value="8">
+                        </div>
+                        
+                        <!-- Invert -->
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="invertCheckbox">
+                                Invert colors
+                            </label>
+                        </div>
+                        
+                        <!-- Edge Detection -->
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="edgeDetectCheckbox">
+                                Edge detection mode
+                            </label>
+                        </div>
+                        
+                        <!-- Dithering -->
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="ditheringCheckbox">
+                                Apply dithering
+                            </label>
+                        </div>
+                        
+                        <!-- Background Removal -->
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="removeBackgroundCheckbox">
+                                Remove background
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-panel" id="galleryTab" role="tabpanel" aria-labelledby="galleryTabBtn">
+                <!-- Gallery Section -->
+                <section class="gallery-section">
+                    <div class="gallery-header">
+                        <h2>Your ASCII Art Gallery</h2>
+                        <button id="clearAllBtn" class="btn btn-secondary">Clear All</button>
+                    </div>
+                    <div id="gallery" class="gallery-grid">
+                        <!-- Gallery items will be inserted here -->
+                    </div>
+                    <div id="emptyState" class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <p>No ASCII art yet. Upload an image to get started!</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Modal for viewing full ASCII art -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">ASCII Art</h3>
+                    <div class="modal-actions">
+                        <button id="downloadBtn" class="btn btn-secondary" title="Download as text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                        <button id="copyBtn" class="btn btn-secondary" title="Copy to clipboard">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                        <button id="closeModal" class="btn btn-secondary">✕</button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <pre id="modalAsciiArt" class="ascii-display"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gifuct-js@2.1.2/dist/gifuct-js.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
